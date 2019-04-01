@@ -15,6 +15,7 @@ import mne
 from mne.preprocessing import ICA
 from mne.parallel import parallel_func
 from mne.report import Report
+from itertools import chain
 
 import config
 
@@ -35,7 +36,7 @@ def run_ica(subject, tsss=config.mf_st_duration):
         extension = run + '_sss_raw'
         raw_fname_in = op.join(meg_subject_dir,
                                config.base_fname.format(**locals()))
-        eve_fname = op.splitext(raw_fname_in)[0] + '-eve.fif'
+        eve_fname = op.splitext(raw_fname_in)[0] + '-int02-eve.fif'
         print("Input: ", raw_fname_in, eve_fname)
 
         raw = mne.io.read_raw_fif(raw_fname_in, preload=True)
@@ -57,7 +58,7 @@ def run_ica(subject, tsss=config.mf_st_duration):
 
     print('  Concatenating runs')
     raw, events = mne.concatenate_raws(raw_list, events_list=events_list)
-    raw.set_eeg_reference(projection=True)
+    raw.set_eeg_reference(projection=False)
     del raw_list
 
     # produce high-pass filtered version of the data for ICA
@@ -70,9 +71,9 @@ def run_ica(subject, tsss=config.mf_st_duration):
     # run ICA on MEG and EEG
     picks_meg = mne.pick_types(epochs_for_ica.info, meg=True, eeg=False,
                                eog=False, stim=False, exclude='bads')
-    picks_eeg = mne.pick_types(epochs_for_ica.info, meg=False, eeg=True,
+    picks_eeg = mne.pick_types(epochs_for_ica.info, meg=False, eeg=False,
                                eog=False, stim=False, exclude='bads')
-    all_picks = {'meg': picks_meg, 'eeg': picks_eeg}
+    all_picks = {'meg': picks_meg}
 
     # get number of components for ICA
     # compute_rank requires 0.18
@@ -81,9 +82,9 @@ def run_ica(subject, tsss=config.mf_st_duration):
 
     n_components_meg = 0.999
 
-    n_components = {'meg': n_components_meg, 'eeg': 0.999}
+    n_components = {'meg': n_components_meg}
 
-    for ch_type in ['meg', 'eeg']:
+    for ch_type in ['meg']:
         print('Running ICA for ' + ch_type)
 
         ica = ICA(method='fastica', random_state=config.random_state,
@@ -112,7 +113,7 @@ def run_ica(subject, tsss=config.mf_st_duration):
             for figure in ica.plot_properties(epochs_for_ica,
                                               picks=list(range(0,
                                                                ica.n_components_)),
-                                              psd_args={'fmax': 60},
+                                              psd_args={'fmax': 45},
                                               show=False):
 
                 report.add_figs_to_section(figure, section=subject,

@@ -22,7 +22,6 @@ from warnings import warn
 
 import config
 
-
 def run_filter(subject):
     print("processing subject: %s" % subject)
 
@@ -31,7 +30,7 @@ def run_filter(subject):
     raws = []
     for run in config.runs:
 
-        # read bad channels for run from config
+         # read bad channels for run from config
         if run:
             bads = config.bads[subject][run]
         else:
@@ -54,7 +53,7 @@ def run_filter(subject):
             continue
 
         raw = mne.io.read_raw_fif(raw_fname_in,
-                                  preload=True, verbose='error')
+                                  preload=True, verbose='error', allow_maxshield=True)
 
         # add bad channels
         raw.info['bads'] = bads
@@ -79,7 +78,7 @@ def run_filter(subject):
         if config.plot:
 
             # plot raw data
-            figure = raw.plot(n_channels=50, butterfly=True,
+            figure = raw.plot(n_channels=50, butterfly=False,
                               group_by='position')
             figure.show()
 
