@@ -5,7 +5,8 @@
 
 The data are bandpass filtered to the frequencies defined in config.py
 (config.h_freq - config.l_freq Hz) using linear-phase fir filter with
-delay compensation.
+delay compensation (i.e. this type of filter will avoid introducing 
+spurious temporal delay in the delay)
 The transition bandwidth is automatically defined. See
 `Background information on filtering
 <http://mne-tools.github.io/dev/auto_tutorials/plot_background_filtering.html>`_
