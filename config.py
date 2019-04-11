@@ -115,8 +115,8 @@ h_freq = None
 # Download the ``cross talk file`` and ``calibration file`` (these are machine specific)
 # path:
 # and place them in the study folder
-mf_ctc_fname = os.path.join(study_path, 'SSS', 'ct_sparse_mgh.fif')
-mf_cal_fname = os.path.join(study_path, 'SSS', 'sss_cal_mgh.dat')
+mf_ctc_fname = os.path.join(study_path, 'SSS', 'NeuroSpin_2008_ct_sparse.fif')
+mf_cal_fname = os.path.join(study_path, 'SSS', 'NeuroSpin_2008_sss_cal.dat')
 
 # ``mf_reference_run `` : defines the reference run used to adjust the head position for
 # all other runs
