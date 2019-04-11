@@ -13,7 +13,7 @@ config.mf_reference_run.
 It is critical to mark bad channels before Maxwell filtering.
 
 The function loads machine-specific calibration files from the paths set for
-config.mf_ctc_fname  and config.mf_cal_fname.
+config.mf_ctc_nspn  and config.mf_cal_nspn.
 """  # noqa: E501
 
 import os.path as op
